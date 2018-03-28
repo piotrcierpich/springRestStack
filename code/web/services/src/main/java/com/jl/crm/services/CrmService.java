@@ -33,4 +33,6 @@ public interface CrmService {
 
 	Customer findCustomerById(long customerId);
 
- }
+	Collection<User> findAllUsers();
+
+}

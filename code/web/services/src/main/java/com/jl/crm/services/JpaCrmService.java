@@ -150,6 +150,17 @@ class JpaCrmService implements CrmService {
         return customer;
     }
 
+    @Override
+    public Collection<User> findAllUsers() {
+        Iterable<User> all = userRepository.findAll();
+        ArrayList<User> users = new ArrayList<>();
+        for (User user : all) {
+//            Hibernate.initialize(user);
+            users.add(user);
+        }
+        return users;
+    }
+
     private File fileForPhoto(Long userId) {
         return new File(ServiceConfiguration.CRM_STORAGE_PROFILES_DIRECTORY, Long.toString(userId));
     }

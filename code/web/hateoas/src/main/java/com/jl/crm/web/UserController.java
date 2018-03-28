@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -43,6 +45,25 @@ class UserController {
         this.crmService = crmService;
         this.userResourceAssembler = userResourceAssembler;
         this.customerResourceAssembler = customerResourceAssembler;
+    }
+
+    @RequestMapping(method = GET, value = "/all")
+    Resources<Resource<User>> loadUsers(){
+        try {
+            User user1 = crmService.findById(1);
+            User user2 = crmService.findById(2);
+            List<Resource<User>> users = Arrays.asList(user1, user2).stream()
+                    .map(userResourceAssembler::toResource)
+                    .collect(Collectors.toList());
+            Resources<Resource<User>> userResources = new Resources<Resource<User>>(users);
+//        resources.add(linkTo(methodOn(UserController.class).loadUserCustomers(user)).withSelfRel());
+            return userResources;
+        }
+        catch(Exception ex)
+        {
+            System.out.println(ex.toString());
+        }
+        return new Resources<Resource<User>>(Arrays.asList());
     }
 
     @RequestMapping(method = DELETE, value = "/{user}")
